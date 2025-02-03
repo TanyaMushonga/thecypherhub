@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState, useCallback } from "react";
-import { useArticle } from "../../store";
+import { useArticle } from "../store";
 
 export const useFetchArticles = (value: string) => {
   const [articles, setArticles] = useState<Article[]>([]);
