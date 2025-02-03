@@ -9,7 +9,7 @@ type blogContent = {
   description: string;
   category: string;
   content: string;
-}
+};
 
 const CreateBlog = () => {
   const [content, setContent] = useState<blogContent>({
@@ -209,6 +209,7 @@ const CreateBlog = () => {
                 <option value="devops">DevOps</option>
                 <option value="web-development">Web Development</option>
                 <option value="mobile-development">Mobile Development</option>
+                <option value="mobile-development">Others</option>
               </select>
             </div>
           </div>
