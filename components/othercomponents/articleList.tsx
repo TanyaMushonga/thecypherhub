@@ -20,12 +20,12 @@ import {
 import { formatDate } from "../../lib/utils";
 import axios from "axios";
 
-function ArticleList({ articles }: { articles: Article[] }) {
-  const { loading } = useFetchArticles("all");
+function ArticleList() {
+  const { loading, articles, setArticles } = useFetchArticles("all");
   const handleDelete = async (id: string) => {
     try {
       await axios.delete(`/api/blog/${id}`);
-      articles = articles.filter((article) => article.id !== id);
+      setArticles((prev) => prev.filter((article) => article.id !== id));
       toast.success("Article deleted successfully");
     } catch (error) {
       console.log("error deleting article", error);
