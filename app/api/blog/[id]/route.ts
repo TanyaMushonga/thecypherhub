@@ -61,7 +61,6 @@ export async function PATCH(req: Request) {
       where: { id: id },
       data: updatedData,
     });
-
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/revalidate`, {
       method: "POST",
       headers: {
