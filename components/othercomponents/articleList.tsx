@@ -19,9 +19,10 @@ import {
 } from "../ui/alert-dialog";
 import { formatDate } from "../../lib/utils";
 import axios from "axios";
+import { Button } from "../ui/button";
 
 function ArticleList() {
-  const { loading, articles, setArticles } = useFetchArticles("all");
+  const { loading, articles, setArticles, setPage } = useFetchArticles("all");
   const handleDelete = async (id: string) => {
     try {
       await axios.delete(`/api/blog/${id}`);
@@ -98,6 +99,14 @@ function ArticleList() {
         ))
       ) : (
         <p className="text-white">No articles found</p>
+      )}
+      {!loading && (
+        <div className="flex flex-row gap-5">
+          <Button className="bg" onClick={() => setPage((prev) => prev + 1)}>Load more</Button>
+          <Button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>
+            Load less
+          </Button>
+        </div>
       )}
     </>
   );
