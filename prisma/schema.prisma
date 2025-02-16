@@ -50,6 +50,7 @@ model Articles {
   updatedAt   DateTime @updatedAt
   author      User?    @relation(fields: [authorId], references: [id])
 
+  @@index([createdAt])
   @@map("articles")
 }
 
