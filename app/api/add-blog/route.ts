@@ -1,8 +1,16 @@
 import prisma from "../../../lib/prisma";
 import { calculateReadTime } from "../../../lib/utils";
+import { validateRequest } from "@/auth";
 
 export async function POST(req: Request) {
   try {
+    const { user: loggedInUser } = await validateRequest();
+
+    if (!loggedInUser) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      });
+    }
     const { title, description, category, coverImgUrl, content } =
       await req.json();
 
@@ -15,6 +23,7 @@ export async function POST(req: Request) {
       coverImgUrl,
       content,
       readTime: readTime,
+      authorId: loggedInUser.id,
     };
 
     await prisma.articles.create({
