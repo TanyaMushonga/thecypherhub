@@ -1,7 +1,15 @@
+import { validateRequest } from "@/auth";
 import prisma from "../../../../lib/prisma";
 
 export async function GET(req: Request) {
   try {
+    const { user: loggedInUser } = await validateRequest();
+
+    if (!loggedInUser) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      });
+    }
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop();
 
@@ -37,6 +45,13 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
+    const { user: loggedInUser } = await validateRequest();
+
+    if (!loggedInUser) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      });
+    }
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop();
 
@@ -89,6 +104,13 @@ export async function PATCH(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
+    const { user: loggedInUser } = await validateRequest();
+
+    if (!loggedInUser) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      });
+    }
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop();
 
