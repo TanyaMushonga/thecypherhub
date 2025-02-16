@@ -14,15 +14,16 @@ datasource db {
 }
 
 model User {
-  id               String    @id @default(uuid()) @map("_id")
-  email            String    @unique
+  id               String     @id @default(uuid()) @map("_id")
+  email            String     @unique
   username         String
   hashedPassword   String
   phonenumber      String
   profileAvatarUrl String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
   sessions         Session[]
+  articles         Articles[]
 
   @@map("users")
 }
@@ -38,6 +39,7 @@ model Session {
 
 model Articles {
   id          String   @id @default(uuid()) @map("_id")
+  authorId    String?
   title       String
   description String
   category    String
@@ -46,6 +48,7 @@ model Articles {
   readTime    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  author      User?    @relation(fields: [authorId], references: [id])
 
   @@map("articles")
 }
