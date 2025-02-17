@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const page = parseInt(url.searchParams.get("page") || "1", 10);
-    const pageSize = parseInt(url.searchParams.get("page_size") || "5", 10);
+    const pageSize = parseInt(url.searchParams.get("page_size") || "10", 10);
 
     const cacheKey = `blogs-${page}-${pageSize}`;
     const cachedResponse = cache.get(cacheKey);
