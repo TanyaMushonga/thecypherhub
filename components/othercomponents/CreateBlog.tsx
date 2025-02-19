@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Tiptap from "./Tiptap";
 import toast from "react-hot-toast";
 import { Image as ImageIcon } from "lucide-react";
+import { readAndCompressImage } from "browser-image-resizer";
 
 type blogContent = {
   title: string;
@@ -113,12 +114,18 @@ const CreateBlog = () => {
     setError("");
     let coverImgBase64 = "";
     if (blogCover) {
+      const resizedImage = await readAndCompressImage(blogCover, {
+        quality: 0.7,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        debug: true,
+      });
       const reader = new FileReader();
       reader.onloadend = () => {
         coverImgBase64 = reader.result as string;
         submitBlog(coverImgBase64);
       };
-      reader.readAsDataURL(blogCover);
+      reader.readAsDataURL(resizedImage);
     } else {
       submitBlog(coverImgBase64);
     }
@@ -160,6 +167,7 @@ const CreateBlog = () => {
       localStorage.removeItem("blogCover");
     }
   };
+
   return (
     <form
       onSubmit={handleSubmit}
