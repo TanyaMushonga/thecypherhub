@@ -5,13 +5,14 @@ import toast from "react-hot-toast";
 import { Image as ImageIcon } from "lucide-react";
 import { notFound, useParams } from "next/navigation";
 import axios from "axios";
+import { readAndCompressImage } from "browser-image-resizer";
 
 type blogContent = {
   title: string;
   description: string;
   category: string;
   content: string;
-}
+};
 
 function UpdateBlog() {
   const { id } = useParams();
@@ -33,7 +34,7 @@ function UpdateBlog() {
         setFetching(true);
         const response = await axios.get(`/api/blog/${id}`, {
           headers: {
-        "Content-Type": "application/json",
+            "Content-Type": "application/json",
           },
         });
 
@@ -42,7 +43,7 @@ function UpdateBlog() {
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           if (error.response.status === 404) {
-        notFound();
+            notFound();
           }
         }
         console.log(error);
@@ -144,12 +145,18 @@ function UpdateBlog() {
     setError("");
     let coverImgBase64 = "";
     if (blogCover) {
+      const resizedImage = await readAndCompressImage(blogCover, {
+        quality: 0.7,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        debug: true,
+      });
       const reader = new FileReader();
       reader.onloadend = () => {
         coverImgBase64 = reader.result as string;
         submitBlog(coverImgBase64);
       };
-      reader.readAsDataURL(blogCover);
+      reader.readAsDataURL(resizedImage);
     } else {
       submitBlog(coverImgBase64);
     }
