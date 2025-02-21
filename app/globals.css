@@ -257,66 +257,71 @@
     }
   }
 
-  table {
-    border-collapse: collapse;
-    margin: 0;
-    overflow: hidden;
-    table-layout: fixed;
-    width: 100%;
+  .tiptap {
+    :first-child {
+      margin-top: 0;
+    }
 
-    td,
-    th {
-      border: 1px solid rgb(200, 200, 200);
-      box-sizing: border-box;
-      min-width: 1em;
-      padding: 6px 8px;
-      position: relative;
-      vertical-align: top;
-    
+    /* Table-specific styling */
+    table {
+      border-collapse: collapse;
+      margin: 0;
+      overflow: hidden;
+      table-layout: fixed;
+      width: 100%;
 
-      >* {
-        margin-bottom: 0;
+      td,
+      th {
+        border: 1px solid var(--gray-3);
+        box-sizing: border-box;
+        min-width: 1em;
+        padding: 6px 8px;
+        position: relative;
+        vertical-align: top;
+
+        >* {
+          margin-bottom: 0;
+        }
+      }
+
+      th {
+        background-color: var(--gray-1);
+        font-weight: bold;
+        text-align: left;
+      }
+
+      .selectedCell:after {
+        background: var(--gray-2);
+        content: "";
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        pointer-events: none;
+        position: absolute;
+        z-index: 2;
+      }
+
+      .column-resize-handle {
+        background-color: var(--purple);
+        bottom: -2px;
+        pointer-events: none;
+        position: absolute;
+        right: -2px;
+        top: 0;
+        width: 4px;
       }
     }
 
-    th {
-      background-color: rgb(175, 173, 173);
-      font-weight: bold;
-      text-align: left;
-      color: #0a0909 !important;
+    .tableWrapper {
+      margin: 1.5rem 0;
+      overflow-x: auto;
     }
 
-    .selectedCell:after {
-      background: rgb(220, 220, 220);
-      content: "";
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      pointer-events: none;
-      position: absolute;
-      z-index: 2;
+    &.resize-cursor {
+      cursor: ew-resize;
+      cursor: col-resize;
     }
-
-    .column-resize-handle {
-      background-color: rgb(128, 0, 128);
-      bottom: -2px;
-      pointer-events: none;
-      position: absolute;
-      right: -2px;
-      top: 0;
-      width: 4px;
-    }
-  }
-
-  .tableWrapper {
-    margin: 1.5rem 0;
-    overflow-x: auto;
-  }
-
-  &.resize-cursor {
-    cursor: ew-resize;
-    cursor: col-resize;
   }
 
 }

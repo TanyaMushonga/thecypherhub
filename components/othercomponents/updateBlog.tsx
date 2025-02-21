@@ -12,6 +12,7 @@ type blogContent = {
   description: string;
   category: string;
   content: string;
+  keywords: string[];
 };
 
 function UpdateBlog() {
@@ -21,12 +22,14 @@ function UpdateBlog() {
     description: "",
     category: "",
     content: "",
+    keywords: [],
   });
   const [blogCover, setBlogCover] = useState<File>();
   const [error, setError] = useState("");
   const [clearEditor, setClearEditor] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [keywordInput, setKeywordInput] = useState("");
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -122,6 +125,24 @@ function UpdateBlog() {
     });
   };
 
+  const handleKeywordInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && keywordInput.trim()) {
+      setContent((prev) => ({
+        ...prev,
+        keywords: [...(prev.keywords || []), keywordInput.trim()],
+      }));
+      setKeywordInput("");
+      e.preventDefault();
+    }
+  };
+
+  const handleRemoveKeyword = (keyword: string) => {
+    setContent((prev) => ({
+      ...prev,
+      keywords: prev?.keywords?.filter((k) => k !== keyword),
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
@@ -169,6 +190,7 @@ function UpdateBlog() {
       category: content.category,
       content: content.content,
       coverImgUrl: coverImgBase64,
+      keywords: content.keywords,
     };
 
     const response = await fetch(`/api/blog/${id}`, {
@@ -191,6 +213,7 @@ function UpdateBlog() {
         description: "",
         category: "",
         content: "",
+        keywords: [],
       });
       setClearEditor(true);
       setBlogCover(undefined);
@@ -213,7 +236,7 @@ function UpdateBlog() {
             clearEditor={clearEditor}
           />
         </div>
-        <div>
+        <div className="w-1/2 pe-10">
           <div className="flex flex-row gap-3">
             <div className="flex flex-col w-full mb-4">
               <label htmlFor="title" className="text-sky-300">
@@ -276,6 +299,31 @@ function UpdateBlog() {
               ref={ref}
               id="blog_cover"
             />
+          </div>
+          <div className="flex flex-col w-full mb-4">
+            <label htmlFor="keywords" className="text-sky-300">
+              Keywords
+            </label>
+            <input
+              type="text"
+              id="keywords"
+              className="w-full border border-sky-300 rounded-md px-2 py-1"
+              value={keywordInput}
+              onChange={(e) => setKeywordInput(e.target.value)}
+              onKeyDown={handleKeywordInput}
+              placeholder="Type a keyword and press Enter"
+            />
+            <div className="flex flex-wrap gap-2 mt-2">
+              {content?.keywords?.map((keyword, index) => (
+                <span
+                  key={index}
+                  className="bg-sky-300 text-white px-2 py-1 rounded-md cursor-pointer"
+                  onClick={() => handleRemoveKeyword(keyword)}
+                >
+                  {keyword} &times;
+                </span>
+              ))}
+            </div>
           </div>
 
           {fetching && (

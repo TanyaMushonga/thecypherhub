@@ -11,8 +11,19 @@ export async function POST(req: Request) {
         status: 401,
       });
     }
-    const { title, description, category, coverImgUrl, content } =
+    const { title, description, category, coverImgUrl, content, keywords } =
       await req.json();
+
+    console.log("keywords", keywords);
+
+    if (!Array.isArray(keywords)) {
+      return new Response(
+        JSON.stringify({ error: "Keywords must be an array" }),
+        {
+          status: 400,
+        }
+      );
+    }
 
     const readTime: string = calculateReadTime(content!);
 
@@ -22,6 +33,7 @@ export async function POST(req: Request) {
       category,
       coverImgUrl,
       content,
+      keywords,
       readTime: readTime,
       authorId: loggedInUser.id,
     };

@@ -46,6 +46,7 @@ model Articles {
   coverImgUrl String?
   content     String
   readTime    String
+  keywords    String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   author      User?    @relation(fields: [authorId], references: [id])

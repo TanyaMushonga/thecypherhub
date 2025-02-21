@@ -302,8 +302,8 @@ const Toolbar = ({ editor, content}: Props) => {
             <button
               className="text-white"
               onClick={(e) => {
-                e.preventDefault();
-                editor.chain().focus().addColumnBefore().run();
+          e.preventDefault();
+          editor.chain().focus().addColumnBefore().run();
               }}
             >
               <BetweenHorizontalStart className="text-sky-100" />
@@ -312,8 +312,8 @@ const Toolbar = ({ editor, content}: Props) => {
             <button
               className="text-white"
               onClick={(e) => {
-                e.preventDefault();
-                editor.chain().focus().deleteColumn().run();
+          e.preventDefault();
+          editor.chain().focus().deleteColumn().run();
               }}
             >
               <TableColumnsSplit className="text-sky-100" />
@@ -321,8 +321,8 @@ const Toolbar = ({ editor, content}: Props) => {
             <button
               className="text-white"
               onClick={(e) => {
-                e.preventDefault();
-                editor.chain().focus().addRowBefore().run();
+          e.preventDefault();
+          editor.chain().focus().addRowBefore().run();
               }}
             >
               <BetweenVerticalStart className="text-sky-100" />
@@ -330,8 +330,8 @@ const Toolbar = ({ editor, content}: Props) => {
             <button
               className="text-white"
               onClick={(e) => {
-                e.preventDefault();
-                editor.chain().focus().deleteRow().run();
+          e.preventDefault();
+          editor.chain().focus().deleteRow().run();
               }}
             >
               <TableRowsSplit className="text-sky-100" />
@@ -339,8 +339,8 @@ const Toolbar = ({ editor, content}: Props) => {
             <button
               className="text-white"
               onClick={(e) => {
-                e.preventDefault();
-                editor.chain().focus().deleteTable().run();
+          e.preventDefault();
+          editor.chain().focus().deleteTable().run();
               }}
             >
               <Grid2x2X className="text-sky-100" />
@@ -349,8 +349,8 @@ const Toolbar = ({ editor, content}: Props) => {
             <button
               className="text-white"
               onClick={(e) => {
-                e.preventDefault();
-                editor.chain().focus().setCellAttribute("colspan", 2).run();
+          e.preventDefault();
+          editor.chain().focus().setCellAttribute("colspan", 2).run();
               }}
             >
               <TbTableExport className="text-sky-100 w-6 h-6" />
