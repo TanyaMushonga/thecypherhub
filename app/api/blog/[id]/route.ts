@@ -1,3 +1,4 @@
+import { validateRequest } from "@/auth";
 import prisma from "../../../../lib/prisma";
 
 export async function GET(req: Request) {
@@ -12,7 +13,7 @@ export async function GET(req: Request) {
     }
 
     const blog = await prisma.articles.findUnique({
-      where: { id: id },
+      where: { id: id, },
     });
 
     if (!blog) {
@@ -37,6 +38,13 @@ export async function GET(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
+    const { user: loggedInUser } = await validateRequest();
+
+    if (!loggedInUser) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      });
+    }
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop();
     const updatedData = await req.json();
@@ -48,7 +56,7 @@ export async function PATCH(req: Request) {
     }
 
     const blog = await prisma.articles.findUnique({
-      where: { id: id },
+      where: { id: id, authorId: loggedInUser.id },
     });
 
     if (!blog) {
@@ -58,7 +66,7 @@ export async function PATCH(req: Request) {
     }
 
     const updatedBlog = await prisma.articles.update({
-      where: { id: id },
+      where: { id: id, authorId: loggedInUser.id },
       data: updatedData,
     });
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/revalidate`, {
@@ -87,6 +95,13 @@ export async function PATCH(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
+    const { user: loggedInUser } = await validateRequest();
+
+    if (!loggedInUser) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      });
+    }
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop();
 
@@ -97,7 +112,7 @@ export async function DELETE(req: Request) {
     }
 
     const blog = await prisma.articles.findUnique({
-      where: { id: id },
+      where: { id: id, authorId: loggedInUser.id },
     });
     if (!blog) {
       return new Response(JSON.stringify({ message: "Blog not found" }), {
@@ -105,7 +120,7 @@ export async function DELETE(req: Request) {
       });
     }
     await prisma.articles.delete({
-      where: { id: id },
+      where: { id: id, authorId: loggedInUser.id },
     });
 
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/revalidate`, {

@@ -1,7 +1,15 @@
+import { validateRequest } from "@/auth";
 import prisma from "../../../lib/prisma";
 
 export async function GET() {
   try {
+    const { user: loggedInUser } = await validateRequest();
+
+    if (!loggedInUser) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      });
+    }
     const subscribers = await prisma.subscribers.findMany({
       orderBy: {
         createdAt: "desc",
