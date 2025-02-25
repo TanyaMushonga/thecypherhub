@@ -3,11 +3,9 @@ import { calculateReadTime } from "../../../lib/utils";
 import { validateRequest } from "@/auth";
 import { put } from "@vercel/blob";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
 
 export async function POST(req: Request) {
   try {
