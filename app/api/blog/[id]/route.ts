@@ -5,16 +5,16 @@ import { put, del } from "@vercel/blob";
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-    const id = url.pathname.split("/").pop();
+    const slug = url.pathname.split("/").pop();
 
-    if (!id) {
+    if (!slug) {
       return new Response(JSON.stringify({ message: "ID is required" }), {
         status: 400,
       });
     }
 
     const blog = await prisma.articles.findUnique({
-      where: { id: id },
+      where: { slug: slug },
     });
 
     if (!blog) {
@@ -48,16 +48,16 @@ export async function PATCH(req: Request) {
     }
 
     const url = new URL(req.url);
-    const id = url.pathname.split("/").pop();
+    const slug = url.pathname.split("/").pop();
 
-    if (!id) {
+    if (!slug) {
       return new Response(JSON.stringify({ message: "ID is required" }), {
         status: 400,
       });
     }
 
     const blog = await prisma.articles.findUnique({
-      where: { id: id, authorId: loggedInUser.id },
+      where: { slug: slug, authorId: loggedInUser.id },
     });
 
     if (!blog) {
@@ -72,7 +72,7 @@ export async function PATCH(req: Request) {
     const category = formData.get("category") as string;
     const content = formData.get("content") as string;
     const keywords = JSON.parse(formData.get("keywords") as string);
-    const slug = formData.get("slug") as string;
+    const SLUG = formData.get("slug") as string;
     const coverImgFile = formData.get("coverImgUrl") as File;
 
     if (!Array.isArray(keywords)) {
@@ -104,11 +104,11 @@ export async function PATCH(req: Request) {
       coverImgUrl,
       content,
       keywords,
-      slug,
+      slug: SLUG,
     };
 
     const updatedBlog = await prisma.articles.update({
-      where: { id: id, authorId: loggedInUser.id },
+      where: { slug: slug, authorId: loggedInUser.id },
       data: updatedData,
     });
 
@@ -147,16 +147,16 @@ export async function DELETE(req: Request) {
     }
 
     const url = new URL(req.url);
-    const id = url.pathname.split("/").pop();
+    const slug = url.pathname.split("/").pop();
 
-    if (!id) {
-      return new Response(JSON.stringify({ message: "ID is required" }), {
+    if (!slug) {
+      return new Response(JSON.stringify({ message: "slug is required" }), {
         status: 400,
       });
     }
 
     const blog = await prisma.articles.findUnique({
-      where: { id: id, authorId: loggedInUser.id },
+      where: { slug: slug, authorId: loggedInUser.id },
     });
 
     if (!blog) {
@@ -169,7 +169,7 @@ export async function DELETE(req: Request) {
     }
 
     await prisma.articles.delete({
-      where: { id: id, authorId: loggedInUser.id },
+      where: { slug: slug, authorId: loggedInUser.id },
     });
 
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/revalidate`, {
