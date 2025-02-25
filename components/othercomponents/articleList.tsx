@@ -43,7 +43,7 @@ function ArticleList() {
             className="flex items-center border-b border-slate-600 pb-4 hover:bg-blue-900 p-2 rounded"
           >
             <Link
-              href={`/article/${article.id}`}
+              href={`/article/${article.slug}`}
               className="flex items-center space-x-2 w-3/4"
             >
               <Image
@@ -91,7 +91,7 @@ function ArticleList() {
                 </AlertDialogContent>
               </AlertDialog>
 
-              <Link href="/article/[id]" as={`/article/${article.id}`}>
+              <Link href="/article/[slug]" as={`/article/${article.slug}`}>
                 <FilePenLine className="text-white hover:text-slate-200" />
               </Link>
             </div>

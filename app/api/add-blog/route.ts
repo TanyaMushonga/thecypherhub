@@ -1,6 +1,13 @@
 import prisma from "../../../lib/prisma";
 import { calculateReadTime } from "../../../lib/utils";
 import { validateRequest } from "@/auth";
+import { put } from "@vercel/blob";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 export async function POST(req: Request) {
   try {
@@ -11,10 +18,15 @@ export async function POST(req: Request) {
         status: 401,
       });
     }
-    const { title, description, category, coverImgUrl, content, keywords } =
-      await req.json();
 
-    console.log("keywords", keywords);
+    const formData = await req.formData();
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const category = formData.get("category") as string;
+    const content = formData.get("content") as string;
+    const keywords = JSON.parse(formData.get("keywords") as string);
+    const slug = formData.get("slug") as string;
+    const coverImgFile = formData.get("coverImgUrl") as File;
 
     if (!Array.isArray(keywords)) {
       return new Response(
@@ -23,6 +35,16 @@ export async function POST(req: Request) {
           status: 400,
         }
       );
+    }
+
+    let coverImgUrl = "";
+    if (coverImgFile) {
+      const coverImgName = `${slug}`;
+      const blob = await put(coverImgName, coverImgFile, {
+        access: "public",
+      });
+
+      coverImgUrl = blob.url;
     }
 
     const readTime: string = calculateReadTime(content!);
@@ -34,6 +56,7 @@ export async function POST(req: Request) {
       coverImgUrl,
       content,
       keywords,
+      slug,
       readTime: readTime,
       authorId: loggedInUser.id,
     };

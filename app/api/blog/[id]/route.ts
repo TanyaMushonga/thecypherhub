@@ -1,5 +1,6 @@
 import { validateRequest } from "@/auth";
 import prisma from "../../../../lib/prisma";
+import { put, del } from "@vercel/blob";
 
 export async function GET(req: Request) {
   try {
@@ -13,7 +14,7 @@ export async function GET(req: Request) {
     }
 
     const blog = await prisma.articles.findUnique({
-      where: { id: id, },
+      where: { id: id },
     });
 
     if (!blog) {
@@ -45,9 +46,9 @@ export async function PATCH(req: Request) {
         status: 401,
       });
     }
+
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop();
-    const updatedData = await req.json();
 
     if (!id) {
       return new Response(JSON.stringify({ message: "ID is required" }), {
@@ -65,10 +66,52 @@ export async function PATCH(req: Request) {
       });
     }
 
+    const formData = await req.formData();
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const category = formData.get("category") as string;
+    const content = formData.get("content") as string;
+    const keywords = JSON.parse(formData.get("keywords") as string);
+    const slug = formData.get("slug") as string;
+    const coverImgFile = formData.get("coverImgUrl") as File;
+
+    if (!Array.isArray(keywords)) {
+      return new Response(
+        JSON.stringify({ error: "Keywords must be an array" }),
+        {
+          status: 400,
+        }
+      );
+    }
+
+    let coverImgUrl = blog.coverImgUrl!;
+    if (coverImgFile) {
+      await del(coverImgUrl);
+
+      // Upload the new image to Vercel Blob
+      const coverImgName = `${slug}`;
+      const blob = await put(coverImgName, coverImgFile, {
+        access: "public",
+      });
+
+      coverImgUrl = blob.url;
+    }
+
+    const updatedData = {
+      title,
+      description,
+      category,
+      coverImgUrl,
+      content,
+      keywords,
+      slug,
+    };
+
     const updatedBlog = await prisma.articles.update({
       where: { id: id, authorId: loggedInUser.id },
       data: updatedData,
     });
+
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/revalidate`, {
       method: "POST",
       headers: {
@@ -83,7 +126,7 @@ export async function PATCH(req: Request) {
       status: 200,
     });
   } catch (error) {
-    console.error("Error fetching blog:", error);
+    console.error("Error updating blog:", error);
     return new Response(
       JSON.stringify({ message: "error", error: (error as Error).message }),
       {
@@ -102,6 +145,7 @@ export async function DELETE(req: Request) {
         status: 401,
       });
     }
+
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop();
 
@@ -114,11 +158,16 @@ export async function DELETE(req: Request) {
     const blog = await prisma.articles.findUnique({
       where: { id: id, authorId: loggedInUser.id },
     });
+
     if (!blog) {
       return new Response(JSON.stringify({ message: "Blog not found" }), {
         status: 404,
       });
     }
+    if (blog.coverImgUrl) {
+      await del(blog.coverImgUrl);
+    }
+
     await prisma.articles.delete({
       where: { id: id, authorId: loggedInUser.id },
     });

@@ -5,10 +5,10 @@ import toast from "react-hot-toast";
 import { Image as ImageIcon } from "lucide-react";
 import { notFound, useParams } from "next/navigation";
 import axios from "axios";
-import { readAndCompressImage } from "browser-image-resizer";
 
 type blogContent = {
   title: string;
+  slug: string;
   description: string;
   category: string;
   content: string;
@@ -16,9 +16,10 @@ type blogContent = {
 };
 
 function UpdateBlog() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [content, setContent] = useState<blogContent>({
     title: "",
+    slug: "",
     description: "",
     category: "",
     content: "",
@@ -35,7 +36,7 @@ function UpdateBlog() {
     const fetchBlog = async () => {
       try {
         setFetching(true);
-        const response = await axios.get(`/api/blog/${id}`, {
+        const response = await axios.get(`/api/blog/${slug}`, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -56,7 +57,7 @@ function UpdateBlog() {
     };
 
     fetchBlog();
-  }, [id]);
+  }, [slug]);
 
   const ref = useRef<HTMLInputElement>(null);
 
@@ -113,7 +114,7 @@ function UpdateBlog() {
       const img = new Image();
       img.src = URL.createObjectURL(file);
       img.onload = () => {
-        if (img.width === 1920 && img.height === 1080) {
+        if (img.width === 1200 && img.height === 630) {
           resolve(true);
         } else {
           resolve(false);
@@ -145,60 +146,52 @@ function UpdateBlog() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (
-      !content.title ||
-      !content.description ||
-      !content.category ||
-      !content.content ||
-      !blogCover
-    ) {
-      setError("Please fill all the fields");
+    if (!content.title) {
+      setError("Title is required");
+      return;
+    } else if (!content.category) {
+      setError("Category is required");
+      return;
+    } else if (!content.description) {
+      setError("Description is required");
+      return;
+    } else if (!content.content) {
+      setError("Content is required");
+      return;
+    } else if (!content.keywords) {
+      setError("Keywords is required");
+      return;
+    } else if (!content.slug) {
+      setError("Slug is required");
+      return;
+    } else if (!blogCover) {
+      setError("Cover Image is required");
       return;
     }
 
     const isValidImage = await validateImageDimensions(blogCover);
     if (!isValidImage) {
-      setError("The blog cover must be 1920x1080 pixels");
+      setError("The blog cover must be 1200x630 pixels");
       return;
     }
 
     setLoading(true);
     setError("");
-    let coverImgBase64 = "";
+
+    const formData = new FormData();
+    formData.append("title", content.title);
+    formData.append("slug", content.slug);
+    formData.append("description", content.description);
+    formData.append("category", content.category);
+    formData.append("content", content.content);
+    formData.append("keywords", JSON.stringify(content.keywords));
     if (blogCover) {
-      const resizedImage = await readAndCompressImage(blogCover, {
-        quality: 0.7,
-        maxWidth: 1920,
-        maxHeight: 1080,
-        debug: true,
-      });
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        coverImgBase64 = reader.result as string;
-        submitBlog(coverImgBase64);
-      };
-      reader.readAsDataURL(resizedImage);
-    } else {
-      submitBlog(coverImgBase64);
+      formData.append("coverImgUrl", blogCover);
     }
-  };
 
-  const submitBlog = async (coverImgBase64: string) => {
-    const payload = {
-      title: content.title,
-      description: content.description,
-      category: content.category,
-      content: content.content,
-      coverImgUrl: coverImgBase64,
-      keywords: content.keywords,
-    };
-
-    const response = await fetch(`/api/blog/${id}`, {
+    const response = await fetch(`/api/blog/${slug}`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+      body: formData,
     });
 
     if (!response.ok) {
@@ -210,6 +203,7 @@ function UpdateBlog() {
       setLoading(false);
       setContent({
         title: "",
+        slug: "",
         description: "",
         category: "",
         content: "",
@@ -252,6 +246,7 @@ function UpdateBlog() {
                 }
               />
             </div>
+
             <div className="flex flex-col w-full mb-4">
               <label htmlFor="tags" className="text-sky-300">
                 Category
@@ -301,18 +296,36 @@ function UpdateBlog() {
             />
           </div>
           <div className="flex flex-col w-full mb-4">
-            <label htmlFor="keywords" className="text-sky-300">
-              Keywords
-            </label>
-            <input
-              type="text"
-              id="keywords"
-              className="w-full border border-sky-300 rounded-md px-2 py-1"
-              value={keywordInput}
-              onChange={(e) => setKeywordInput(e.target.value)}
-              onKeyDown={handleKeywordInput}
-              placeholder="Type a keyword and press Enter"
-            />
+            <div className="flex flex-row gap-2">
+              <div className="flex flex-col w-full mb-4">
+                <label htmlFor="keywords" className="text-sky-300">
+                  Keywords
+                </label>
+                <input
+                  type="text"
+                  id="keywords"
+                  className="w-full border border-sky-300 rounded-md px-2 py-1"
+                  value={keywordInput}
+                  onChange={(e) => setKeywordInput(e.target.value)}
+                  onKeyDown={handleKeywordInput}
+                  placeholder="Type a keyword and press Enter"
+                />
+              </div>
+              <div className="flex flex-col w-full mb-4">
+                <label htmlFor="title" className="text-sky-300">
+                  Slug
+                </label>
+                <input
+                  type="text"
+                  id="slug"
+                  className="w-full border border-sky-300 rounded-md px-2 py-1"
+                  value={content.slug}
+                  onChange={(e) =>
+                    setContent((prev) => ({ ...prev, slug: e.target.value }))
+                  }
+                />
+              </div>
+            </div>
             <div className="flex flex-wrap gap-2 mt-2">
               {content?.keywords?.map((keyword, index) => (
                 <span
