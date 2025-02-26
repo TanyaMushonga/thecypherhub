@@ -47,6 +47,7 @@ model Articles {
   content     String
   readTime    String
   keywords    String[]
+  slug        String?  @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   author      User?    @relation(fields: [authorId], references: [id])
