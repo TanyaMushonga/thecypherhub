@@ -3,9 +3,9 @@ import { calculateReadTime } from "../../../lib/utils";
 import { validateRequest } from "@/auth";
 import { put } from "@vercel/blob";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
-export const fetchCache = 'force-no-store';
+export const fetchCache = "force-no-store";
 
 export async function POST(req: Request) {
   try {
@@ -58,6 +58,8 @@ export async function POST(req: Request) {
       readTime: readTime,
       authorId: loggedInUser.id,
     };
+
+    console.log(data);
 
     await prisma.articles.create({
       data,
