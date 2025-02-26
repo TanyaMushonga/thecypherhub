@@ -23,10 +23,10 @@ import { Button } from "../ui/button";
 
 function ArticleList() {
   const { loading, articles, setArticles, setPage } = useFetchArticles("all");
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (slug: string) => {
     try {
-      await axios.delete(`/api/blog/${id}`);
-      setArticles((prev) => prev.filter((article) => article.id !== id));
+      await axios.delete(`/api/blog/${slug}`);
+      setArticles((prev) => prev.filter((article) => article.slug !== slug));
       toast.success("Article deleted successfully");
     } catch (error) {
       console.log("error deleting article", error);
@@ -39,7 +39,7 @@ function ArticleList() {
       ) : articles?.length > 0 ? (
         articles.map((article) => (
           <div
-            key={article.id}
+            key={article.slug}
             className="flex items-center border-b border-slate-600 pb-4 hover:bg-blue-900 p-2 rounded"
           >
             <Link
@@ -83,7 +83,7 @@ function ArticleList() {
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
                       className="bg-destructive hover:bg-destructive"
-                      onClick={() => handleDelete(article.id)}
+                      onClick={() => handleDelete(article.slug)}
                     >
                       Continue
                     </AlertDialogAction>
