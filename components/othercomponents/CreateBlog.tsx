@@ -126,7 +126,7 @@ const CreateBlog = () => {
     formData.append("category", content.category);
     formData.append("content", content.content);
     formData.append("keywords", JSON.stringify(content.keywords));
-    formData.append("slug", JSON.stringify(content.slug));
+    formData.append("slug", content.slug);
     if (blogCover) {
       formData.append("coverImgUrl", blogCover);
     }
