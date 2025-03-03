@@ -17,7 +17,7 @@ function page() {
         <div className="mt-5">
           <LoginForm />
           {/* <p className="text-center my-3">Or</p> */}
-{/* 
+          {/* 
           <p className="text-center my-3">
             Don&apos;t have an account?{" "}
             <Link href="/signup" className="text-primary">
