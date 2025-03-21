@@ -64,3 +64,9 @@ model subscribers {
 
   @@map("subscribers")
 }
+
+model verificationTokens {
+  id    String @id @default(uuid()) @map("_id")
+  email String @unique
+  token String @unique
+}
