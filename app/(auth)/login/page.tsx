@@ -1,6 +1,6 @@
 import React from "react";
 import LoginForm from "../../../components/othercomponents/LoginForm";
-import Link from "next/link";
+// import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -16,14 +16,14 @@ function page() {
         </p>
         <div className="mt-5">
           <LoginForm />
-          <p className="text-center my-3">Or</p>
-
+          {/* <p className="text-center my-3">Or</p> */}
+          {/* 
           <p className="text-center my-3">
             Don&apos;t have an account?{" "}
             <Link href="/signup" className="text-primary">
               Signup
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
     </main>

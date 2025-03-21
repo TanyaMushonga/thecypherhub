@@ -3,7 +3,7 @@ import React from "react";
 
 export default async function Page() {
   return (
-    <main className="bg-primary h-[90vh] w-full pt-5">
+    <main className="bg-primary min-h-[90vh] w-full pt-5">
       <div>
         <UpdateBlog />
       </div>

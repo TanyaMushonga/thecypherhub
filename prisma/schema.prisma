@@ -38,20 +38,19 @@ model Session {
 }
 
 model Articles {
-  id             String   @id @default(uuid()) @map("_id")
-  authorId       String?
-  title          String
-  description    String
-  category       String
-  coverImgUrl    String?
-  content        String
-  readTime       String
-  keywords       String[]
-  opengraphImage String?
-  slug           String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  author         User?    @relation(fields: [authorId], references: [id])
+  id          String   @id @default(uuid()) @map("_id")
+  authorId    String?
+  title       String
+  description String
+  category    String
+  coverImgUrl String?
+  content     String
+  readTime    String
+  keywords    String[]
+  slug        String?  @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      User?    @relation(fields: [authorId], references: [id])
 
   @@index([createdAt])
   @@map("articles")
@@ -64,4 +63,10 @@ model subscribers {
   createdAt DateTime @default(now())
 
   @@map("subscribers")
+}
+
+model verificationTokens {
+  id    String @id @default(uuid()) @map("_id")
+  email String @unique
+  token String @unique
 }
