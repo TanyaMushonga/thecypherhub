@@ -59,7 +59,7 @@ model Articles {
 model subscribers {
   id        String   @id @default(uuid()) @map("_id")
   email     String   @unique
-  status    Int      @default(1)
+  status    Int      @default(0)
   createdAt DateTime @default(now())
 
   @@map("subscribers")
