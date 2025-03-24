@@ -6,13 +6,13 @@ export const sendConfirmationEmailAfterSubscribe = async (
   email: string,
   token: string
 ) => {
-  const confirmationLink = `${process.env.NEXT_PUBLIC_BASE_URL}/newsubscription?token=${token}`;
+  const confirmationLink = `${process.env.NEXT_PUBLIC_BASE_URL}/new-verification?token=${token}`;
   try {
     const { data, error } = await resend.emails.send({
       from: "TanyaMushonga@thecypherhub.tech",
       to: email,
       subject: "Thank you for subscribing to our newsletter!",
-      html: `<table
+      html: `  <table
       align="center"
       width="600"
       cellpadding="0"
@@ -36,7 +36,7 @@ export const sendConfirmationEmailAfterSubscribe = async (
       </tr>
       <tr>
         <td align="center">
-          <h2 style="color: #fff">
+          <h2 style="color: #fff; text-align: center;">
             Thank you for subscribing to our newsletter!
           </h2>
         </td>
@@ -96,12 +96,16 @@ export const sendConfirmationEmailAfterSubscribe = async (
           <p style="color: #fff">Best regards,<br />Tanyaradzwa T Mushonga</p>
         </td>
       </tr>
-      <tr>
-        <td
-          align="center"
-          style="padding: 20px 0; margin-top: 20px; border-top: 1px solid #ddd; display: flex; justify-content: center"
-        >
-          <div>
+      <tr
+        style="
+          padding: 20px 0;
+          margin-top: 20px;
+          border-top: 1px solid #ddd;
+          text-align: center;
+        "
+      >
+        <td>
+          <div style="display: inline-block; margin: 0 5px;">
             <a
               href="https://www.linkedin.com/in/tanyaradzwa-t-mushonga-b23745209/"
               style="margin: 0 10px"
@@ -109,24 +113,24 @@ export const sendConfirmationEmailAfterSubscribe = async (
               <img
                 src="https://www.thecypherhub.tech/linkedin.png"
                 alt=""
-                width="37"
-                height="37"
+                width="35"
+                height="35"
                 class="social-icons"
               />
             </a>
           </div>
-          <div>
-            <a href="https://wa.me/+263712389290" style="margin: 0 10px">
+          <div style="display: inline-block; margin: 0 5px;">
+            <a href="https://wa.me/+263712389289" style="margin: 0 10px">
               <img
                 src="https://www.thecypherhub.tech/whatsapp.png"
                 alt=""
-                width="30"
-                height="30"
+                width="33"
+                height="33"
                 class="social-icons"
               />
             </a>
           </div>
-          <div>
+          <div style="display: inline-block; margin: 0 5px;">
             <a
               href="https://www.tanyaradzwatmushonga.me/"
               style="margin: 0 10px"
