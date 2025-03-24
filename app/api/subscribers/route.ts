@@ -1,5 +1,6 @@
 import { validateRequest } from "@/auth";
 import prisma from "../../../lib/prisma";
+import { sendConfirmationEmailAfterSubscribe } from "@/lib/emails";
 
 export async function GET() {
   try {
@@ -63,19 +64,40 @@ export async function POST(req: Request) {
       data,
     });
 
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/revalidate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        paths: ["/api/subscribers"],
-      }),
+    //generate token
+    const token = Math.random().toString(36).substring(2, 15);
+
+    const tokenExist = await prisma.verificationTokens.findUnique({
+      where: { token },
     });
+    const emailExistInToken = await prisma.verificationTokens.findUnique({
+      where: { email },
+    });
+
+    if (tokenExist || emailExistInToken)
+      return new Response(
+        JSON.stringify({
+          message: "Something went wrong! Please try again later.",
+        }),
+        { status: 400 }
+      );
+
+    const verificationToken = await prisma.verificationTokens.create({
+      data: {
+        token,
+        email,
+      },
+    });
+
+    if (verificationToken) {
+      //send confirmation email
+      await sendConfirmationEmailAfterSubscribe(email, token);
+    }
 
     return new Response(
       JSON.stringify({
-        message: "Thank you for subscribing to our newsletter",
+        message:
+          "Thank you for subscribing to our newsletter, please check you inbox to confirm your subscription!. You might need to check your spam folder if you don't see the email in your inbox.",
       }),
       { status: 201 }
     );
