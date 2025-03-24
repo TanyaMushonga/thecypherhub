@@ -74,7 +74,13 @@ export async function POST(req: Request) {
       where: { email },
     });
 
-    if (tokenExist || emailExistInToken) return null;
+    if (tokenExist || emailExistInToken)
+      return new Response(
+        JSON.stringify({
+          message: "Something went wrong! Please try again later.",
+        }),
+        { status: 400 }
+      );
 
     const verificationToken = await prisma.verificationTokens.create({
       data: {
