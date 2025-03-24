@@ -6,7 +6,7 @@ export const sendConfirmationEmailAfterSubscribe = async (
   email: string,
   token: string
 ) => {
-  const confirmationLink = `${process.env.NEXT_PUBLIC_BASE_URL}/new-verification?token=${token}`;
+  const confirmationLink = `https://www.thecypherhub.tech/new-verification?token=${token}`;
   try {
     const { data, error } = await resend.emails.send({
       from: "TanyaMushonga@thecypherhub.tech",
