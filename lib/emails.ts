@@ -120,7 +120,7 @@ export const sendConfirmationEmailAfterSubscribe = async (
             </a>
           </div>
           <div style="display: inline-block; margin: 0 5px;">
-            <a href="https://wa.me/+263712389289" style="margin: 0 10px">
+            <a href="https://wa.me/+263712389290" style="margin: 0 10px">
               <img
                 src="https://www.thecypherhub.tech/whatsapp.png"
                 alt=""
