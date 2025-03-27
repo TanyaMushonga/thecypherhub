@@ -174,12 +174,40 @@ export const sendConfirmationEmailAfterSubscribe = async (
   }
 };
 
-export const sendEmailToMyself = async (htmlContent: string) => {
+export const sendEmailToMyself = async (
+  htmlContent: string,
+  subject: string
+) => {
   try {
     const { data, error } = await resend.emails.send({
       from: "TanyaMushonga@thecypherhub.tech",
       to: "tanyaradzwatmushonga@gmail.com",
-      subject: "Thank you for subscribing to our newsletter!",
+      subject: `${subject}`,
+      react: NoteEmail({ htmlContent }),
+    });
+
+    if (error) {
+      console.error("Error sending confirmation email:", error);
+      throw new Error("Error sending confirmation email");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error sending email to myself:", error);
+    throw new Error("Error sending email to myself");
+  }
+};
+
+export const sendEmailToSubscribers = async (
+  htmlContent: string,
+  subject: string,
+  email: string
+) => {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "TanyaMushonga@thecypherhub.tech",
+      to: `${email}`,
+      subject: `${subject}`,
       react: NoteEmail({ htmlContent }),
     });
 
