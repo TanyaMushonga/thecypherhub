@@ -5,7 +5,7 @@ import "quill/dist/quill.snow.css";
 import {
   sendEmailToMyselfAction,
   sendEmailToSubscribersAction,
-} from "@/app/(main)/actions/sendNotes";
+} from "@/app/(main)/actions/Notes";
 import toast from "react-hot-toast";
 import { Input } from "../ui/input";
 
