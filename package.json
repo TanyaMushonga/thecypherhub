@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "trigger:dev": "npx trigger.dev@latest dev",
-    "dev": "npx concurrently --kill-others --names \"next,trigger\" --prefix-colors \"yellow,blue\" \"next dev\" \"npm run trigger:dev\"",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start -p $PORT",
     "postinstall": "prisma generate",
@@ -24,7 +23,7 @@
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.6",
-    "@react-email/components": "0.0.34",
+    "@react-email/components": "^0.0.34",
     "@tanstack/react-table": "^8.20.6",
     "@tiptap/extension-code-block-lowlight": "^2.11.2",
     "@tiptap/extension-color": "^2.10.4",
@@ -37,7 +36,6 @@
     "@tiptap/extension-underline": "^2.10.4",
     "@tiptap/react": "^2.10.4",
     "@tiptap/starter-kit": "^2.10.4",
-    "@trigger.dev/sdk": "^3.3.17",
     "@vercel/blob": "^0.27.1",
     "axios": "^1.7.9",
     "browser-image-resizer": "^2.4.1",
@@ -69,7 +67,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@trigger.dev/build": "^3.3.17",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -77,7 +74,6 @@
     "eslint-config-next": "15.1.6",
     "postcss": "^8",
     "prisma": "^5.18.0",
-    "react-email": "3.0.7",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   }
