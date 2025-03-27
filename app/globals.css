@@ -325,3 +325,14 @@
   }
 
 }
+.ql-toolbar .ql-stroke {
+  stroke: #ffffff; /* Change the stroke color of icons to white */
+}
+
+.ql-toolbar .ql-fill {
+  fill: #ffffff; /* Change the fill color of icons to white */
+}
+
+.ql-toolbar button {
+  color: #ffffff; /* Ensure button text/icons are white */
+}

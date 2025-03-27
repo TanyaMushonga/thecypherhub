@@ -1,3 +1,4 @@
+import NoteEmail from "@/emails/note";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
@@ -120,7 +121,7 @@ export const sendConfirmationEmailAfterSubscribe = async (
             </a>
           </div>
           <div style="display: inline-block; margin: 0 5px;">
-            <a href="https://wa.me/+263712389289" style="margin: 0 10px">
+            <a href="https://wa.me/+263712389290" style="margin: 0 10px">
               <img
                 src="https://www.thecypherhub.tech/whatsapp.png"
                 alt=""
@@ -170,5 +171,54 @@ export const sendConfirmationEmailAfterSubscribe = async (
   } catch (error) {
     console.error("Error sending confirmation email:", error);
     throw new Error("Error sending confirmation email");
+  }
+};
+
+export const sendEmailToMyself = async (
+  htmlContent: string,
+  subject: string
+) => {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "TanyaMushonga@thecypherhub.tech",
+      to: "tanyaradzwatmushonga@gmail.com",
+      subject: `${subject}`,
+      react: NoteEmail({ htmlContent }),
+    });
+
+    if (error) {
+      console.error("Error sending confirmation email:", error);
+      throw new Error("Error sending confirmation email");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error sending email to myself:", error);
+    throw new Error("Error sending email to myself");
+  }
+};
+
+export const sendEmailToSubscribers = async (
+  htmlContent: string,
+  subject: string,
+  email: string
+) => {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "TanyaMushonga@thecypherhub.tech",
+      to: `${email}`,
+      subject: `${subject}`,
+      react: NoteEmail({ htmlContent }),
+    });
+
+    if (error) {
+      console.error("Error sending confirmation email:", error);
+      throw new Error("Error sending confirmation email");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error sending email to myself:", error);
+    throw new Error("Error sending email to myself");
   }
 };
