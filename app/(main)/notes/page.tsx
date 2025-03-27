@@ -7,8 +7,8 @@ const Notes = dynamic(() => import("@/components/othercomponents/notes"), {
 
 function Page() {
   return (
-    <div className="container ">
-      <div className="flex flex-row flex-1 items-start">
+    <div className="container mx-auto p-4">
+      <div className="flex flex-col md:flex-row  flex-1 items-start">
         <div className="flex-1">
           <Notes />
         </div>
