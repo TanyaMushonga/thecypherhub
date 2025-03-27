@@ -1,12 +1,21 @@
-import Notes from "@/components/othercomponents/notes";
 import React from "react";
+import dynamic from "next/dynamic";
 
-function page() {
+const Notes = dynamic(() => import("@/components/othercomponents/notes"), {
+  ssr: false,
+});
+
+function Page() {
   return (
-    <div>
-      <Notes />
+    <div className="container ">
+      <div className="flex flex-row flex-1 items-start">
+        <div className="flex-1">
+          <Notes />
+        </div>
+        <div className="flex-1">d</div>
+      </div>
     </div>
   );
 }
 
-export default page;
+export default Page;
