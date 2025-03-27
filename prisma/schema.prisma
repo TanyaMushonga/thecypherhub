@@ -61,6 +61,7 @@ model subscribers {
   email     String   @unique
   status    Int      @default(0)
   createdAt DateTime @default(now())
+  notes     notes[]
 
   @@map("subscribers")
 }
@@ -69,4 +70,15 @@ model verificationTokens {
   id    String @id @default(uuid()) @map("_id")
   email String @unique
   token String @unique
+}
+
+model notes {
+  id        String   @id @default(uuid()) @map("_id")
+  subject   String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subscribers   subscribers? @relation(fields: [subscribersId], references: [id])
+  subscribersId String?
 }
