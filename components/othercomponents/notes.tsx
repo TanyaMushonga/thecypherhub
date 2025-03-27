@@ -2,13 +2,19 @@
 import React, { useEffect, useRef, useTransition } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import { sendEmailToMyselfAction } from "@/app/(main)/actions/sendNotes";
+import {
+  sendEmailToMyselfAction,
+  sendEmailToSubscribersAction,
+} from "@/app/(main)/actions/sendNotes";
 import toast from "react-hot-toast";
+import { Input } from "../ui/input";
 
 function Notes() {
   const editorRef = useRef<HTMLDivElement>(null);
   const quillInstanceRef = useRef<Quill | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [isPendingSubscribers, startTransitionSubscribers] = useTransition();
+  const [subject, setSubject] = React.useState("");
 
   useEffect(() => {
     if (
@@ -56,11 +62,26 @@ function Notes() {
     }
   }, []);
 
-  const getEditorContent = () => {
+  const sendToSubscribers = () => {
+    if (quillInstanceRef.current) {
+      const content = quillInstanceRef.current.root.innerHTML;
+      startTransitionSubscribers(() => {
+        sendEmailToSubscribersAction(content, subject).then((res) => {
+          if (res.success) {
+            toast.success(res.success);
+          }
+          if (res.error) {
+            toast.error(res.error);
+          }
+        });
+      });
+    }
+  };
+  const sendToMyself = () => {
     if (quillInstanceRef.current) {
       const content = quillInstanceRef.current.root.innerHTML;
       startTransition(() => {
-        sendEmailToMyselfAction(content).then((res) => {
+        sendEmailToMyselfAction(content, subject).then((res) => {
           if (res.success) {
             toast.success(res.success);
           }
@@ -81,20 +102,36 @@ function Notes() {
         ref={editorRef}
         style={{
           height: "300px",
-          // width: "80%",
-          // maxWidth: "800px",
           border: "1px solid #ccc",
-
           backgroundColor: "#171e42",
         }}
       ></div>
-      <button
-        onClick={getEditorContent}
-        disabled={isPending}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        {isPending ? "Sending..." : "Send to myself"}
-      </button>
+      <div className="mt-4">
+        <Input
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          className="bg-blue-950 text-white"
+        />
+        <div className="flex flex-row gap-4">
+          <button
+            onClick={sendToMyself}
+            disabled={isPending || !subject || !quillInstanceRef.current}
+            className="mt-4 px-4 py-2 bg-blue-700 text-white rounded"
+          >
+            {isPending ? "Sending..." : "Send to myself"}
+          </button>
+
+          <button
+            onClick={sendToSubscribers}
+            disabled={
+              isPendingSubscribers || !subject || !quillInstanceRef.current
+            }
+            className="mt-4 px-4 py-2 bg-blue-700 text-white rounded"
+          >
+            {isPendingSubscribers ? "Sending..." : "Send to subscribers"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
