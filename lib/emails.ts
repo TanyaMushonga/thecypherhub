@@ -1,3 +1,4 @@
+import NoteEmail from "@/emails/note";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
@@ -170,5 +171,26 @@ export const sendConfirmationEmailAfterSubscribe = async (
   } catch (error) {
     console.error("Error sending confirmation email:", error);
     throw new Error("Error sending confirmation email");
+  }
+};
+
+export const sendEmailToMyself = async (htmlContent: string) => {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "TanyaMushonga@thecypherhub.tech",
+      to: "tanyaradzwatmushonga@gmail.com",
+      subject: "Thank you for subscribing to our newsletter!",
+      react: NoteEmail({ htmlContent }),
+    });
+
+    if (error) {
+      console.error("Error sending confirmation email:", error);
+      throw new Error("Error sending confirmation email");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error sending email to myself:", error);
+    throw new Error("Error sending email to myself");
   }
 };
