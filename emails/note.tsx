@@ -15,12 +15,14 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 import parse from "html-react-parser";
+import { extractNameFromEmail } from "@/lib/utils";
 
 interface NoteEmailProps {
   htmlContent: string;
+  email: string;
 }
 
-export const NoteEmail = ({ htmlContent }: NoteEmailProps) => (
+export const NoteEmail = ({ htmlContent, email }: NoteEmailProps) => (
   <Html>
     <Head />
     <Body style={main}>
@@ -48,7 +50,7 @@ export const NoteEmail = ({ htmlContent }: NoteEmailProps) => (
 
         <Section style={content}>
           <Heading as="h2" style={title}>
-            Hie there,
+            Hie {extractNameFromEmail(email)}!,
           </Heading>
           <Text style={paragraph}>
             It&apos;s me again, Tanya Mushonga! I bring you another exciting
