@@ -46,15 +46,56 @@ export async function POST(req: Request) {
     });
 
     if (emailExist) {
-      return new Response(
-        JSON.stringify({
-          error:
-            "There is already another subscriber with the same email, please use a different one!",
-        }),
-        {
-          status: 400,
+      const isSubscribed = emailExist.status === 1;
+      if (isSubscribed) {
+        return new Response(
+          JSON.stringify({
+            message: "You are already subscribed to our newsletter.",
+          }),
+          { status: 200 }
+        );
+      } else {
+        await prisma.subscribers.update({
+          where: { email },
+          data: { status: 1 },
+        });
+        const token = Math.random().toString(36).substring(2, 15);
+
+        const tokenExist = await prisma.verificationTokens.findUnique({
+          where: { token },
+        });
+        const emailExistInToken = await prisma.verificationTokens.findUnique({
+          where: { email },
+        });
+
+        if (tokenExist || emailExistInToken)
+          return new Response(
+            JSON.stringify({
+              error: "Something went wrong! Please try again later.",
+            }),
+            { status: 400 }
+          );
+
+        const verificationToken = await prisma.verificationTokens.create({
+          data: {
+            token,
+            email,
+          },
+        });
+
+        if (verificationToken) {
+          //send confirmation email
+          await sendConfirmationEmailAfterSubscribe(email, token);
         }
-      );
+
+        return new Response(
+          JSON.stringify({
+            message:
+              "Thank you for subscribing to our newsletter, please check you inbox to confirm your subscription!.",
+          }),
+          { status: 200 }
+        );
+      }
     }
     const data = {
       email,
