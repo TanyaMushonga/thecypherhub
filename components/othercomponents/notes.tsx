@@ -27,9 +27,12 @@ function Notes() {
         modules: {
           toolbar: [
             [{ header: [1, 2, 3, false] }],
+            [{ size: ["small", "normal", "large", "huge"] }],
             ["bold", "italic", "underline", "strike"],
             [{ list: "ordered" }, { list: "bullet" }],
-            ["link", "image"],
+            ["link", "image", "code-block"],
+            ["undo", "redo"],
+            ["uppercase", "lowercase"],
             ["clean"],
           ],
         },
@@ -40,7 +43,6 @@ function Notes() {
       if (toolbar instanceof HTMLElement) {
         toolbar.style.backgroundColor = "#10173b";
         toolbar.style.color = "#ffffff";
-        // toolbar.style.width = "64.2%";
         toolbar.style.border = "1px solid #ccc";
         toolbar.style.borderBottom = "none";
         toolbar.style.borderRadius = "5px 5px 0 0";
@@ -58,6 +60,8 @@ function Notes() {
       if (editor instanceof HTMLElement) {
         editor.style.color = "#fff";
         editor.style.backgroundColor = "#171e42";
+        editor.style.fontSize = "16px"; // Increase font size
+        editor.style.lineHeight = "1.6";
       }
     }
   }, []);

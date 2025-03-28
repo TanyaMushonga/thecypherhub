@@ -54,6 +54,7 @@
     "node-cache": "^5.1.2",
     "postcss": "^8",
     "quill": "^2.0.3",
+    "quill-table": "^1.0.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.52.2",
