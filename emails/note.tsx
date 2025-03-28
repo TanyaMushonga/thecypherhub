@@ -50,7 +50,7 @@ export const NoteEmail = ({ htmlContent, email }: NoteEmailProps) => (
 
         <Section style={content}>
           <Heading as="h2" style={title}>
-            Hie {extractNameFromEmail(email)}!,
+            Hie {extractNameFromEmail(email)}!
           </Heading>
           <Text style={paragraph}>
             It&apos;s me again, Tanya Mushonga! I bring you another exciting
@@ -230,7 +230,7 @@ const title = {
 };
 
 const paragraph = {
-  fontSize: "18px",
+  fontSize: "20px",
   lineHeight: "21px",
   color: "#3c3f44",
 };
