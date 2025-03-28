@@ -62,9 +62,6 @@ export const sendConfirmationEmailAfterSubscribe = async (
               >
                 Confirm Subscription
               </a>
-              <p style="font-size: 14px; line-height: 1.5; color: #777; margin-top: 20px;">
-                If you did not subscribe to our newsletter, you can safely ignore this email.
-              </p>
             </td>
           </tr>
       <tr>
