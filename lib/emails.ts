@@ -110,7 +110,10 @@ export const sendEmailToMyself = async (
       from: "TanyaMushonga@thecypherhub.tech",
       to: "tanyaradzwatmushonga@gmail.com",
       subject: `${subject}`,
-      react: NoteEmail({ htmlContent }),
+      react: NoteEmail({
+        htmlContent,
+        email: "tanyaradzwatmushonga@gmail.com",
+      }),
     });
 
     if (error) {
