@@ -15,6 +15,13 @@ export async function GET(req: Request) {
 
     const blog = await prisma.articles.findUnique({
       where: { slug: slug },
+      include:{
+        comments: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        }
+      }
     });
 
     if (!blog) {
