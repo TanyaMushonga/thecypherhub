@@ -1,7 +1,7 @@
 import prisma from "../../../lib/prisma";
 import NodeCache from "node-cache";
 
-const cache = new NodeCache({ stdTTL: 518400 }); 
+const cache = new NodeCache({ stdTTL: 518400 });
 
 export async function GET(request: Request) {
   try {
@@ -16,7 +16,7 @@ export async function GET(request: Request) {
       return new Response(JSON.stringify(cachedResponse), {
         headers: {
           "Content-Type": "application/json",
-          "Cache-Control": "s-maxage=518400, stale-while-revalidate", 
+          "Cache-Control": "s-maxage=518400, stale-while-revalidate",
         },
       });
     }
@@ -27,8 +27,15 @@ export async function GET(request: Request) {
       orderBy: {
         createdAt: "desc",
       },
-      skip,
-      take,
+      include: {
+        comments: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+      },
+      skip: skip,
+      take: take,
     });
 
     const totalCount = await prisma.articles.count();
