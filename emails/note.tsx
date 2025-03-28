@@ -230,7 +230,7 @@ const title = {
 };
 
 const paragraph = {
-  fontSize: "20px",
+  fontSize: "17px",
   lineHeight: "21px",
   color: "#3c3f44",
 };
