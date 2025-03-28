@@ -55,7 +55,7 @@ export const NoteEmail = ({ htmlContent }: NoteEmailProps) => (
             edition of my tech blog,
           </Text>
 
-          {parse(htmlContent)}
+          <Section style={paragraph}>{parse(htmlContent)}</Section>
 
           <Row>
             <Hr
@@ -169,10 +169,10 @@ export const NoteEmail = ({ htmlContent }: NoteEmailProps) => (
         </Text>
 
         <Link
-          href="/https://www.thecypherhub.tech/unsubscribe"
+          href="https://www.thecypherhub.tech/unsubscribe"
           style={footerLink}
         >
-          Unsubscribe from emails like this{" "}
+          Unsubscribe{" "}
         </Link>
 
         <Link href="https://www.thecypherhub.tech/" style={footerLink}>
@@ -228,7 +228,7 @@ const title = {
 };
 
 const paragraph = {
-  fontSize: "15px",
+  fontSize: "18px",
   lineHeight: "21px",
   color: "#3c3f44",
 };

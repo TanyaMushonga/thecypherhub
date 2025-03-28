@@ -27,12 +27,9 @@ function Notes() {
         modules: {
           toolbar: [
             [{ header: [1, 2, 3, false] }],
-            [{ size: ["small", "normal", "large", "huge"] }],
             ["bold", "italic", "underline", "strike"],
             [{ list: "ordered" }, { list: "bullet" }],
             ["link", "image", "code-block"],
-            ["undo", "redo"],
-            ["uppercase", "lowercase"],
             ["clean"],
           ],
         },
