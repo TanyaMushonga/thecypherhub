@@ -38,7 +38,7 @@ model Session {
 }
 
 model Articles {
-  id          String   @id @default(uuid()) @map("_id")
+  id          String     @id @default(uuid()) @map("_id")
   authorId    String?
   title       String
   description String
@@ -47,10 +47,11 @@ model Articles {
   content     String
   readTime    String
   keywords    String[]
-  slug        String?  @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  author      User?    @relation(fields: [authorId], references: [id])
+  comments    comments[]
+  slug        String?    @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  author      User?      @relation(fields: [authorId], references: [id])
 
   @@index([createdAt])
   @@map("articles")
@@ -81,4 +82,12 @@ model notes {
 
   subscribers   subscribers? @relation(fields: [subscribersId], references: [id])
   subscribersId String?
+}
+
+model comments {
+  id        String   @id @default(uuid()) @map("_id")
+  articleId String
+  comment   String
+  article   Articles @relation(fields: [articleId], references: [id])
+  createdAt DateTime @default(now())
 }
