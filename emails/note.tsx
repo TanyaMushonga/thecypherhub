@@ -104,7 +104,7 @@ export const NoteEmail = ({ htmlContent, email }: NoteEmailProps) => (
                 as="h3"
                 style={{
                   color: "rgb(31,41,55)",
-                  fontSize: "14px",
+                  fontSize: "20px",
                   fontWeight: 500,
                   lineHeight: "20px",
                   margin: "0px",
@@ -115,7 +115,7 @@ export const NoteEmail = ({ htmlContent, email }: NoteEmailProps) => (
               <Text
                 style={{
                   color: "rgb(107,114,128)",
-                  fontSize: "12px",
+                  fontSize: "17px",
                   fontWeight: 500,
                   lineHeight: "14px",
                   margin: "0px",
@@ -139,7 +139,7 @@ export const NoteEmail = ({ htmlContent, email }: NoteEmailProps) => (
                   <Img
                     alt="GitHub"
                     src="https://www.thecypherhub.tech/github.png"
-                    style={{ height: "15px", width: "15px" }}
+                    style={{ height: "20px", width: "20px" }}
                   />
                 </Link>
                 <Link
@@ -154,7 +154,7 @@ export const NoteEmail = ({ htmlContent, email }: NoteEmailProps) => (
                   <Img
                     alt="LinkedIn"
                     src="https://react.email/static/in-icon.png"
-                    style={{ height: "15px", width: "15px" }}
+                    style={{ height: "20px", width: "20px" }}
                   />
                 </Link>
               </Section>
