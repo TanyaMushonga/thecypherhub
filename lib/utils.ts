@@ -38,3 +38,19 @@ export function calculateReadTime(content: string): string {
   const readTime = Math.ceil(words / wordsPerMinute);
   return `${readTime} min read`;
 }
+
+export function extractNameFromEmail(email: string): string {
+  if (!email) return "Subscriber"; // Default fallback if email is empty
+
+  // Extract the part before the '@'
+  const namePart = email.split("@")[0];
+
+  // Replace dots, underscores, or dashes with spaces and capitalize each word
+  const formattedName = namePart
+    .replace(/[\._-]/g, " ") // Replace dots, underscores, or dashes with spaces
+    .split(" ") // Split into words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
+    .join(" "); // Join the words back together
+
+  return formattedName;
+}
